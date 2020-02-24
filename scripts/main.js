@@ -44,7 +44,7 @@ ymaps.ready(function() {
     /* обновить либо пополнить базу точек */
     function reloadBd(item) {
         data = [];
-        if (localStorage.getItem('item') != '') {
+        if (localStorage.getItem('item') != 'null') {
             data = JSON.parse(localStorage.getItem('item'));
         }
         data.push(item);
@@ -162,7 +162,6 @@ ymaps.ready(function() {
             clusterHideIconOnBalloonOpen: false,
             geoObjectHideIconOnBalloonOpen: false
         });
-
 
     /* показываем форму при клике на карту */
     myMap.events.add('click', function(e) {
