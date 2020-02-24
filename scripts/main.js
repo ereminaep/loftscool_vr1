@@ -76,7 +76,7 @@ ymaps.ready(function() {
     };
 
     /* показать отзывы, заполненные по координатам*/
-    function showRewiew(coords, balloons) {
+    function showRewiew() {
 
         let reviewList = document.querySelector('.reviewList');
         reviewList.innerHTML = '';
@@ -100,14 +100,8 @@ ymaps.ready(function() {
             coords = balloons[0];
             balloons = [];
         } else {
-            console.log(data);
-
+            filtered = data.filter(item => item.coords[0] == coords[0] && item.coords[1] == coords[1]);
         }
-
-        console.log(coords);
-        console.log(data);
-
-        filtered = data.filter(item => item.coords[0] == coords[0] && item.coords[1] == coords[1]);
 
         for (let i = 0; i < filtered.length; i++) {
             let item = templateReview({ name: filtered[i].name, place: filtered[i].place, date: filtered[i].data, message: filtered[i].message });
@@ -145,8 +139,10 @@ ymaps.ready(function() {
 
     /* отслеживаем клик по адресу из балуна */
     map.onclick = function(e) {
+        console.log(e);
         if (e.target.className == 'goform') {
             e.preventDefault;
+            myMap.balloon.close();
             showForm();
             showRewiew(e.target.dataset.item.split(','));
         }
@@ -180,16 +176,13 @@ ymaps.ready(function() {
         }).then(showForm());
     });
 
-
-
-
     clusterer.events
         .add(['click'], function(e) {
 
             let target = e.get('target'),
                 type = e.get('type');
             balloons = [];
-
+            /* в случае клика по кластеру, показываем балун и вычисляем отзывы, которые соответствуют группе, иначе открываем форму */
             if (typeof target.getGeoObjects != 'undefined') {
                 for (let i = 0; i < target.getGeoObjects().length; i++) {
                     balloons.push(target.getGeoObjects()[i].geometry.getBounds()[0]);
@@ -201,7 +194,6 @@ ymaps.ready(function() {
                 target.options.set('hasBalloon', false);
             }
         });
-
 
     let getPointData = function(index) {
             return {
@@ -217,7 +209,6 @@ ymaps.ready(function() {
                 preset: 'islands#violetIcon'
             };
         };
-
 
     let points = [];
 
@@ -235,26 +226,16 @@ ymaps.ready(function() {
         points.push(data[i].coords);
     }
 
-
-
     geoObjects = [];
-
     for (let i = 0, len = points.length; i < len; i++) {
         geoObjects[i] = new ymaps.Placemark(points[i], getPointData(i), getPointOptions());
     }
-
     clusterer.add(geoObjects);
-
-
-
     clusterer.options.set({
         gridSize: 80,
         clusterDisableClickZoom: true
     });
-
-    console.log(clusterer.getBounds());
     myMap.geoObjects.add(clusterer);
-
     myMap.setBounds(clusterer.getBounds(), {
         checkZoomRange: true
     });
