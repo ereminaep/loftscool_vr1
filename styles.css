@@ -127,7 +127,7 @@ body,
 .reviewForm__close {
     width: 14px;
     height: 14px;
-    background-image: url(images/85bfa5efa9ef4bf317ec0444a2dc64c0.png);
+    background-image: url(images/close.png);
     margin-right: 12px;
 }
 
@@ -136,7 +136,7 @@ body,
 }
 
 .reviewForm__marker {
-    background-image: url(images/1e2b52d31ea196ad3d204aeb75bcad01.png);
+    background-image: url(images/marker.png);
     width: 8px;
     height: 14px;
     margin-right: 10px;
